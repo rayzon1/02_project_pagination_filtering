@@ -17,7 +17,7 @@ FSJS project 2 - List Filter and Pagination
    scoped to that function.
 ***/
 
-const ul = document.querySelector('ul.student-list').children;
+const studentListChildren = document.querySelector('ul.student-list').children;
 const body = document.querySelector('body');
 const studentList = document.querySelector('ul.student-list');
 const page = document.querySelector('div.page');
@@ -50,20 +50,24 @@ function showPage(list, page) {
      }
    }
 }
-showPage(ul, 2);
+showPage(studentListChildren, 1);
 /*** 
    Create the `appendPageLinks function` to generate, append, and add 
    functionality to the pagination buttons.
 ***/
 
+const div = document.createElement('div');
+const ul = document.createElement('ul')
+
 function appendPageLinks(num){
-   let div = document.createElement('div');
-   let ul = document.createElement('ul')
+   
    for (let i = 1; i <= num; i ++){
       let li = document.createElement('li');
       let a = document.createElement('a');
+      ul.setAttribute('class', 'pages')
       a.setAttribute('href', '#');
       a.textContent = i;
+      li.setAttribute('class', `${i}`)
       li.appendChild(a);
       ul.appendChild(li);
    }
@@ -71,8 +75,36 @@ function appendPageLinks(num){
    div.appendChild(ul);
    page.appendChild(div);
    console.log(div);
+   
 }
-appendPageLinks(5);
+
+// This event listener is for the created ul of numbered pagination links
+ul.addEventListener('click',  (e) => {
+
+   function buttonClick(num) {
+      let ulPages = document.querySelector('ul.pages').children;
+      let liClick = ulPages[num];
+      return liClick;
+   }
+
+   const pages = document.querySelector('ul.pages').children;
+  
+   for (let i = 0; i <= pages.length; i ++){
+      console.log(i);
+   }
+   if(e.target === pages){
+      console.log('hello');
+      showPage(studentListChildren, 1);
+   } else if (e.target === buttonClick(1)){
+      showPage(studentListChildren, 2);
+   }
+
+   
+   console.log(pages);
+});
+
+appendPageLinks(6);
+
 
 
 
