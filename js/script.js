@@ -70,9 +70,9 @@ console.log(div);
 function appendPageLinks(num){
 
    function createLi(elem, attr, name) {
-      let el = document.createElement(elem);
-      el.setAttribute(attr, name);
-      return el;
+      let element = document.createElement(elem);
+      element.setAttribute(attr, name);
+      return element;
    }
    
    for (let i = 1; i <= num; i ++){
