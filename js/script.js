@@ -40,8 +40,10 @@ const page = document.querySelector('div.page');
 ***/
 
 function showPage(list, page) {
+ 
    let end = page * 10;
    let start = end - 10;
+
    for (let i = 0; i < list.length; i ++){
      if(i >= start && i <= end){
         list[i].style.display = '';
@@ -57,53 +59,39 @@ showPage(studentListChildren, 1);
 ***/
 
 const div = document.createElement('div');
-const ul = document.createElement('ul')
+const ul = document.createElement('ul');
+ul.setAttribute('class', 'pages');
+div.className = 'pagination';
+div.appendChild(ul);
+page.appendChild(div);
+console.log(div);
 
+// Need to dynamically add links based on amount of people on the list.
 function appendPageLinks(num){
+
+   function createLi(elem, attr, name) {
+      let el = document.createElement(elem);
+      el.setAttribute(attr, name);
+      return el;
+   }
    
    for (let i = 1; i <= num; i ++){
-      let li = document.createElement('li');
-      let a = document.createElement('a');
-      ul.setAttribute('class', 'pages')
-      a.setAttribute('href', '#');
+      let li = createLi('li', 'class', `${i}`);
+      let a = createLi('a', 'href', '#');
       a.textContent = i;
-      li.setAttribute('class', `${i}`)
       li.appendChild(a);
       ul.appendChild(li);
    }
-   div.className = 'pagination';
-   div.appendChild(ul);
-   page.appendChild(div);
-   console.log(div);
    
 }
 
 // This event listener is for the created ul of numbered pagination links
 ul.addEventListener('click',  (e) => {
-
-   function buttonClick(num) {
-      let ulPages = document.querySelector('ul.pages').children;
-      let liClick = ulPages[num];
-      return liClick;
-   }
-
-   const pages = document.querySelector('ul.pages').children;
-  
-   for (let i = 0; i <= pages.length; i ++){
-      console.log(i);
-   }
-   if(e.target === pages){
-      console.log('hello');
-      showPage(studentListChildren, 1);
-   } else if (e.target === buttonClick(1)){
-      showPage(studentListChildren, 2);
-   }
-
-   
-   console.log(pages);
+   showPage(studentListChildren, e.target.textContent);
 });
-
-appendPageLinks(6);
+let number = Math.ceil(studentListChildren.length / 10);
+console.log(number);
+appendPageLinks(number);
 
 
 
