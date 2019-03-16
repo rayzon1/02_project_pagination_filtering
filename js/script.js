@@ -48,6 +48,7 @@ function appendPageLinks(num){
    }
 }
 
+// This function creates the search elements and then appends them to the page.
 function inputSearch() {
    let divSearch = createEl('div', 'class', 'student-search');
    let input = createEl('input', 'placeholder', 'Search for students...');
@@ -60,14 +61,7 @@ function inputSearch() {
 
 }
 
-// function showLinks(num){
-//    const getLinks = document.querySelector('ul.pages');
-//    getLinks.remove();
-//    appendPageLinks(num);
-// }
-
-
-
+// This function will display the list item search results to the page while hiding all other list items.
 function getSearch() {
    const getInput = document.querySelector('input.input');
    const getButton = document.querySelector('button.button');
@@ -86,8 +80,7 @@ function getSearch() {
             studentListChildren[i].style.display = 'none';
          }
       } 
-      
-      console.log(getLinks);
+
       getLinks.style.display = 'none';
       getInput.style.display = 'none';
       getButton.textContent = 'Show List';
@@ -99,7 +92,7 @@ function getSearch() {
    
 }
 
-// This event listener is for the created ul of numbered pagination links
+// Main function will be called first.
 function main(){
    let number = Math.ceil(studentListChildren.length / 10);
    div.appendChild(ul);
