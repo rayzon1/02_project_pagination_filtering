@@ -1,11 +1,16 @@
+/*
+Description: This script dynamically splits the list to different pages as well as creates pagination links dynamically based
+on number of items in the list. I have also added a search bar as well as a submit button.
+Author: Gerardo Keys
+Date: 03/15/19
+*/ 
+
 const studentListChildren = document.querySelector('ul.student-list').children;
 const page = document.querySelector('div.page');
 const pageHeader = document.querySelector('div.page-header');
 const div = createEl('div', 'class', 'pagination');
 const ul = createEl('ul', 'class', 'pages');
 
-div.appendChild(ul);
-page.appendChild(div);
 
 // This function creates the pages with a max of 10 items per list.
 function showPage(list, page) {
@@ -44,7 +49,6 @@ function appendPageLinks(num){
 }
 
 function inputSearch() {
-   
    let divSearch = createEl('div', 'class', 'student-search');
    let input = createEl('input', 'placeholder', 'Search for students...');
    let button = createEl('button', 'class', 'button');
@@ -54,22 +58,59 @@ function inputSearch() {
    button.textContent = 'Search';
    input.setAttribute('class', 'input');
 
-   console.log(pageHeader);
 }
+
+// function showLinks(num){
+//    const getLinks = document.querySelector('ul.pages');
+//    getLinks.remove();
+//    appendPageLinks(num);
+// }
+
+
 
 function getSearch() {
    const getInput = document.querySelector('input.input');
    const getButton = document.querySelector('button.button');
-   console.log(getInput);
-   console.log(getButton);
+   const getNames = document.querySelectorAll('h3');
+   const getLinks = document.querySelector('ul.pages');
+   
+   getButton.addEventListener('click', (e) => {
+      let value = getInput.value;
+
+      for(let i = 0; i < studentListChildren.length; i ++){
+         if(value === getNames[i].textContent ){
+            studentListChildren[i].style.display = '';
+         } else if (value === '') {
+            location.reload();
+         } else {
+            studentListChildren[i].style.display = 'none';
+         }
+      } 
+      
+      console.log(getLinks);
+      getLinks.style.display = 'none';
+      getInput.style.display = 'none';
+      getButton.textContent = 'Show List';
+
+      getButton.addEventListener('click', (e) => {
+         location.reload();
+      })
+   });
+   
 }
 
 // This event listener is for the created ul of numbered pagination links
-let number = Math.ceil(studentListChildren.length / 10);
-showPage(studentListChildren, 1);
-appendPageLinks(number);
-inputSearch();
-getSearch();
+function main(){
+   let number = Math.ceil(studentListChildren.length / 10);
+   div.appendChild(ul);
+   page.appendChild(div);
+   showPage(studentListChildren, 1);
+   appendPageLinks(number);
+   inputSearch();
+   getSearch();
+}
+
+main();
 
 
 
