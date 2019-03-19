@@ -13,7 +13,8 @@ const pageHeader = document.querySelector("div.page-header");
 const div = createEl("div", "class", "pagination");
 const ul = createEl("ul", "class", "pages");
 
-// This function creates the pages with a max of 10 items per list.
+
+// This function creates the pages with a list and pages shown with a max of 10 items per page.
 function showPage(list, page) {
   let end = page * 10;
   let start = end - 10;
@@ -36,6 +37,7 @@ function createEl(elem, attr, name) {
 // Need to dynamically add links based on amount of people on the list.
 // CreateLi function within the appendPageLinks function is to create elements used in the loop.
 function appendPageLinks(num) {
+
   for (let i = 1; i <= num; i++) {
     let li = createEl("li", "class", "link");
     let a = createEl("a", "href", "#");
@@ -43,6 +45,7 @@ function appendPageLinks(num) {
     a.textContent = i;
     li.appendChild(a);
     ul.appendChild(li);
+    
     a.addEventListener("click", e => {
       showPage(studentListChildren, e.target.textContent);
     });
@@ -70,18 +73,22 @@ function getSearch() {
 
   getButton.addEventListener("click", () => {
     let value = getInput.value;
-
+    let test = []; // array for matched name
+    
     for (let i = 0; i < studentListChildren.length; i++) {
       if (value === getNames[i].textContent) {
-        studentListChildren[i].style.display = "";
+        //studentListChildren[i].style.display = "";
+        test.push(studentListChildren[i]);
+        showPage(test, test.length); // shows one page and one result
+       
       } else if (value === "") {
         location.reload();
       } else {
         studentListChildren[i].style.display = "none";
       }
     }
-
-    getLinks.style.display = "none";
+    
+    //getLinks.style.display = "none";
     getInput.style.display = "none";
     getButton.textContent = "Show List";
 
