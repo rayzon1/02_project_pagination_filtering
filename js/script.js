@@ -18,6 +18,7 @@ const ul = createEl("ul", "class", "pages");
 function showPage(list, page) {
   let end = page * 10;
   let start = end - 10;
+  let number = Math.ceil(list.length / 10)
   for (let i = 0; i < list.length; i++) {
     if (i >= start && i < end) {
       list[i].style.display = "";
@@ -70,6 +71,8 @@ function getSearch() {
   const getButton = document.querySelector("button.button");
   const getNames = document.querySelectorAll("h3");
   const getLinks = document.querySelector("ul.pages");
+  const studentList = document.querySelector("ul.student-list");
+  const divHeader = document.querySelector("div.page")
 
   getButton.addEventListener("click", () => {
     let value = getInput.value;
@@ -77,10 +80,7 @@ function getSearch() {
     
     for (let i = 0; i < studentListChildren.length; i++) {
       if (value === getNames[i].textContent) {
-        //studentListChildren[i].style.display = "";
-        test.push(studentListChildren[i]);
-        showPage(test, test.length); // shows one page and one result
-       
+        studentListChildren[i].style.display = "";
       } else if (value === "") {
         location.reload();
       } else {
@@ -88,10 +88,10 @@ function getSearch() {
       }
     }
     
-    //getLinks.style.display = "none";
+    getLinks.style.display = "none";
     getInput.style.display = "none";
     getButton.textContent = "Show List";
-
+   
     getButton.addEventListener("click", () => {
       location.reload();
     });
