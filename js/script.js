@@ -12,13 +12,15 @@ const page = document.querySelector("div.page");
 const pageHeader = document.querySelector("div.page-header");
 const div = createEl("div", "class", "pagination");
 const ul = createEl("ul", "class", "pages");
+let number = Math.ceil(studentListChildren.length / 10);
 
+appendPageLinks(studentListChildren, number);
+main();
 
 // This function creates the pages with a list and pages shown with a max of 10 items per page.
 function showPage(list, page) {
   let end = page * 10;
   let start = end - 10;
-  let number = Math.ceil(list.length / 10)
   for (let i = 0; i < list.length; i++) {
     if (i >= start && i < end) {
       list[i].style.display = "";
@@ -26,6 +28,7 @@ function showPage(list, page) {
       list[i].style.display = "none";
     }
   }
+  
 }
 
 // This function creates the element and sets the attribute to the arguments given.
@@ -37,8 +40,7 @@ function createEl(elem, attr, name) {
 
 // Need to dynamically add links based on amount of people on the list.
 // CreateLi function within the appendPageLinks function is to create elements used in the loop.
-function appendPageLinks(num) {
-
+function appendPageLinks(list, num) {
   for (let i = 1; i <= num; i++) {
     let li = createEl("li", "class", "link");
     let a = createEl("a", "href", "#");
@@ -46,11 +48,13 @@ function appendPageLinks(num) {
     a.textContent = i;
     li.appendChild(a);
     ul.appendChild(li);
-    
+
     a.addEventListener("click", e => {
-      showPage(studentListChildren, e.target.textContent);
+      showPage(list, e.target.textContent);
     });
   }
+  div.appendChild(ul);
+   page.appendChild(div);
 }
 
 // This function creates the search elements and then appends them to the page.
@@ -71,26 +75,34 @@ function getSearch() {
   const getButton = document.querySelector("button.button");
   const getNames = document.querySelectorAll("h3");
   const getLinks = document.querySelector("ul.pages");
-  const studentList = document.querySelector("ul.student-list");
-  const divHeader = document.querySelector("div.page")
+  const divHeader = document.querySelector("div.pagination");
 
   getButton.addEventListener("click", () => {
     let value = getInput.value;
-    let test = []; // array for matched name
-    
+    let match = []; // array for matched names
+    let notMatch = []; // array for unmatched names
     for (let i = 0; i < studentListChildren.length; i++) {
-      if (value === getNames[i].textContent) {
-        studentListChildren[i].style.display = "";
-      } else if (value === "") {
-        location.reload();
+      if (getNames[i].textContent.includes(value)) {
+        showPage(studentListChildren[i], 1);
+        match.push(getNames[i].textContent);
+        divHeader.remove();
+      } else if (getNames[i].textContent.includes(value) == false) {
+        getLinks.remove();
+        studentListChildren[i].style.display = "none";
+        divHeader.innerHTML =
+          "No people found. Please click Show List to try again.";
       } else {
         studentListChildren[i].style.display = "none";
+        notMatch.push(getNames[i].textContent);
       }
     }
-    
-    getLinks.style.display = "none";
+    if (value === "") {
+      location.reload();
+    }
+
     getInput.style.display = "none";
     getButton.textContent = "Show List";
+
    
     getButton.addEventListener("click", () => {
       location.reload();
@@ -100,13 +112,9 @@ function getSearch() {
 
 // Main function will be called first.
 function main() {
-  let number = Math.ceil(studentListChildren.length / 10);
-  div.appendChild(ul);
-  page.appendChild(div);
   showPage(studentListChildren, 1);
-  appendPageLinks(number);
   inputSearch();
   getSearch();
 }
 
-main();
+
