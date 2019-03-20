@@ -15,7 +15,7 @@ const ul = createEl("ul", "class", "pages");
 let number = Math.ceil(studentListChildren.length / 10);
 
 appendPageLinks(studentListChildren, number);
-main();
+
 
 // This function creates the pages with a list and pages shown with a max of 10 items per page.
 function showPage(list, page) {
@@ -86,11 +86,7 @@ function getSearch() {
         showPage(studentListChildren[i], 1);
         match.push(getNames[i].textContent);
         divHeader.remove();
-      } else if (getNames[i].textContent.includes(value) == false) {
-        getLinks.remove();
-        studentListChildren[i].style.display = "none";
-        divHeader.innerHTML =
-          "No people found. Please click Show List to try again.";
+        appendPageLinks(match, 1);
       } else {
         studentListChildren[i].style.display = "none";
         notMatch.push(getNames[i].textContent);
@@ -117,4 +113,5 @@ function main() {
   getSearch();
 }
 
+main();
 
