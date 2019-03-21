@@ -14,7 +14,9 @@ const div = createEl("div", "class", "pagination");
 const ul = createEl("ul", "class", "pages");
 const getLinks = document.querySelector("ul.pages");
 const getDiv = document.querySelector("div.pagination");
-let number = Math.ceil(studentListChildren.length / 10);
+const number = Math.ceil(studentListChildren.length / 10);
+
+
 
 
 // This function creates the pages with a list and pages shown with a max of 10 items per page.
@@ -40,9 +42,9 @@ function createEl(elem, attr, name) {
 
 // Need to dynamically add links based on amount of people on the list.
 // CreateLi function within the appendPageLinks function is to create elements used in the loop.
-function appendPageLinks(list, num) {
-
-  for (let i = 1; i <= num; i++) {
+function appendPageLinks(list) {
+  const number = Math.ceil(list.length / 10);
+  for (let i = 1; i <= number; i++) {
   
     let li = createEl("li", "class", "link");
     let a = createEl("a", "href", "#");
@@ -82,31 +84,35 @@ function getSearch() {
   const studentlist = document.querySelector("ul.student-list");
 
   getButton.addEventListener("click", () => {
-    
+    divHeader.remove();
+
     let value = getInput.value;
     let match = []; // array for matched names
     let notMatch = []; // array for unmatched names
+
     for (let i = 0; i < studentListChildren.length; i++) {
       if (getNames[i].textContent.includes(value)) {
-        showPage(studentListChildren[i], 1);
-        match.push(getNames[i].textContent);
-        
+        match.push(studentListChildren[1]);
+        showPage(match, 1);
+        appendPageLinks(match);
       } else {
         studentListChildren[i].style.display = "none";
         notMatch.push(getNames[i].textContent);
       }
-      
+       
     }
+
     if (value === "") {
       location.reload();
     }
+
     if (match.length == 0){
       studentlist.innerHTML = `<p>No results found. Please click Show List to try again.</p>`;
     } 
+    
     getInput.style.display = "none";
     getButton.textContent = "Show List";
 
-   
     getButton.addEventListener("click", () => {
       location.reload();
     });
@@ -116,13 +122,13 @@ function getSearch() {
 
 
 // Main function will be called first.
+
 function main() {
   showPage(studentListChildren, 1);
+  appendPageLinks(studentListChildren);
   inputSearch();
   getSearch();
-  appendPageLinks(studentListChildren, number);
-
+  
 }
 
 main();
-
