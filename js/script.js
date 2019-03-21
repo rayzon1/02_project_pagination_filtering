@@ -12,9 +12,9 @@ const page = document.querySelector("div.page");
 const pageHeader = document.querySelector("div.page-header");
 const div = createEl("div", "class", "pagination");
 const ul = createEl("ul", "class", "pages");
+const getLinks = document.querySelector("ul.pages");
+const getDiv = document.querySelector("div.pagination");
 let number = Math.ceil(studentListChildren.length / 10);
-
-appendPageLinks(studentListChildren, number);
 
 
 // This function creates the pages with a list and pages shown with a max of 10 items per page.
@@ -41,7 +41,9 @@ function createEl(elem, attr, name) {
 // Need to dynamically add links based on amount of people on the list.
 // CreateLi function within the appendPageLinks function is to create elements used in the loop.
 function appendPageLinks(list, num) {
+
   for (let i = 1; i <= num; i++) {
+  
     let li = createEl("li", "class", "link");
     let a = createEl("a", "href", "#");
     a.setAttribute("class", "active");
@@ -55,6 +57,7 @@ function appendPageLinks(list, num) {
   }
   div.appendChild(ul);
    page.appendChild(div);
+   
 }
 
 // This function creates the search elements and then appends them to the page.
@@ -76,8 +79,10 @@ function getSearch() {
   const getNames = document.querySelectorAll("h3");
   const getLinks = document.querySelector("ul.pages");
   const divHeader = document.querySelector("div.pagination");
+  const studentlist = document.querySelector("ul.student-list");
 
   getButton.addEventListener("click", () => {
+    
     let value = getInput.value;
     let match = []; // array for matched names
     let notMatch = []; // array for unmatched names
@@ -85,17 +90,19 @@ function getSearch() {
       if (getNames[i].textContent.includes(value)) {
         showPage(studentListChildren[i], 1);
         match.push(getNames[i].textContent);
-        divHeader.remove();
-        appendPageLinks(match, 1);
+        
       } else {
         studentListChildren[i].style.display = "none";
         notMatch.push(getNames[i].textContent);
       }
+      
     }
     if (value === "") {
       location.reload();
     }
-
+    if (match.length == 0){
+      studentlist.innerHTML = `<p>No results found. Please click Show List to try again.</p>`;
+    } 
     getInput.style.display = "none";
     getButton.textContent = "Show List";
 
@@ -106,11 +113,15 @@ function getSearch() {
   });
 }
 
+
+
 // Main function will be called first.
 function main() {
   showPage(studentListChildren, 1);
   inputSearch();
   getSearch();
+  appendPageLinks(studentListChildren, number);
+
 }
 
 main();
