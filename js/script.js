@@ -10,13 +10,9 @@ Date: 03/15/19
 const studentListChildren = document.querySelector("ul.student-list").children;
 const page = document.querySelector("div.page");
 const pageHeader = document.querySelector("div.page-header");
-const div = createEl("div", "class", "pagination");
-const ul = createEl("ul", "class", "pages");
 const getLinks = document.querySelector("ul.pages");
 const getDiv = document.querySelector("div.pagination");
-const number = Math.ceil(studentListChildren.length / 10);
-
-
+const studentlist = document.querySelector("ul.student-list");
 
 
 // This function creates the pages with a list and pages shown with a max of 10 items per page.
@@ -30,7 +26,6 @@ function showPage(list, page) {
       list[i].style.display = "none";
     }
   }
-  
 }
 
 // This function creates the element and sets the attribute to the arguments given.
@@ -43,23 +38,31 @@ function createEl(elem, attr, name) {
 // Need to dynamically add links based on amount of people on the list.
 // CreateLi function within the appendPageLinks function is to create elements used in the loop.
 function appendPageLinks(list) {
+  const div = createEl("div", "class", "pagination");
+  const ul = createEl("ul", "class", "pages");
+  const getDiv = document.querySelector("div.pagination");
   const number = Math.ceil(list.length / 10);
-  for (let i = 1; i <= number; i++) {
-  
-    let li = createEl("li", "class", "link");
-    let a = createEl("a", "href", "#");
-    a.setAttribute("class", "active");
-    a.textContent = i;
-    li.appendChild(a);
-    ul.appendChild(li);
-
-    a.addEventListener("click", e => {
-      showPage(list, e.target.textContent);
-    });
+  if (page.lastElementChild === getDiv) {
+    console.log("success");
+    getDiv.remove();
   }
-  div.appendChild(ul);
-   page.appendChild(div);
-   
+  if (page.lastElementChild !== getDiv){
+    for (let i = 1; i <= number; i++) {
+      let li = createEl("li", "class", "link");
+      let a = createEl("a", "href", "#");
+      a.textContent = i;
+      li.appendChild(a);
+      ul.appendChild(li);
+  
+      a.addEventListener("click", e => {
+        showPage(list, e.target.textContent);
+      });
+    }
+    div.appendChild(ul);
+    page.appendChild(div);
+  
+  }
+  console.log(list.length)
 }
 
 // This function creates the search elements and then appends them to the page.
@@ -81,45 +84,43 @@ function getSearch() {
   const getNames = document.querySelectorAll("h3");
   const getLinks = document.querySelector("ul.pages");
   const divHeader = document.querySelector("div.pagination");
-  const studentlist = document.querySelector("ul.student-list");
+  const linkSelect = document.querySelector("li.link")
 
-  getButton.addEventListener("click", () => {
-    divHeader.remove();
-
+  getButton.addEventListener("click", (e) => {
     let value = getInput.value;
     let match = []; // array for matched names
     let notMatch = []; // array for unmatched names
-
+    
+    
     for (let i = 0; i < studentListChildren.length; i++) {
       if (getNames[i].textContent.includes(value)) {
         match.push(studentListChildren[1]);
-        showPage(match, 1);
         appendPageLinks(match);
+        showPage(match, 1);
       } else {
         studentListChildren[i].style.display = "none";
         notMatch.push(getNames[i].textContent);
       }
-       
     }
 
     if (value === "") {
       location.reload();
     }
 
-    if (match.length == 0){
+    if (match.length == 0) {
       studentlist.innerHTML = `<p>No results found. Please click Show List to try again.</p>`;
-    } 
-    
+    }
+
     getInput.style.display = "none";
     getButton.textContent = "Show List";
-
+  
+    
+    
     getButton.addEventListener("click", () => {
       location.reload();
     });
   });
 }
-
-
 
 // Main function will be called first.
 
@@ -128,7 +129,6 @@ function main() {
   appendPageLinks(studentListChildren);
   inputSearch();
   getSearch();
-  
 }
 
 main();
