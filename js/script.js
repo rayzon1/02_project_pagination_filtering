@@ -40,6 +40,7 @@ function appendPageLinks(list) {
   const ul = createEl("ul", "class", "pages");
   const getDiv = document.querySelector("div.pagination");
   const number = Math.ceil(list.length / 10);
+  const linkSelector = document.getElementsByTagName("a");
   if (page.lastElementChild === getDiv) {
     getDiv.remove();
   }
@@ -50,9 +51,16 @@ function appendPageLinks(list) {
       a.textContent = i;
       li.appendChild(a);
       ul.appendChild(li);
-
+      
       a.addEventListener("click", e => {
         showPage(list, e.target.textContent);
+        const link = e.target
+        for (let i = 0; i <= linkSelector.length; i ++){
+            if (link){
+               link.setAttribute('class', 'active');
+            }
+            linkSelector[i].removeAttribute('class');
+        }
       });
     }
     div.appendChild(ul);
