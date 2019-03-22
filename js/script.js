@@ -1,8 +1,8 @@
 /*
-Description: This script dynamically splits the list into different pages as well as creates pagination links dynamically based
+Description: This script dynamically splits the list into different pages as well as creates pagination links based
 on number of items in the list. I have also added a search bar as well as a submit button that will display the name of the 
-person searched for if they are on the list. If they are not on the list the page will reload. If no text is entered the page 
-will also reload.
+person searched for. If they are not on the list the page will show an error message. If no input is typed, the page will 
+reload. 
 Author: Gerardo Keys
 Date: 03/15/19
 */
@@ -11,11 +11,9 @@ const studentListChildren = document.querySelector("ul.student-list").children;
 const page = document.querySelector("div.page");
 const pageHeader = document.querySelector("div.page-header");
 const getLinks = document.querySelector("ul.pages");
-const getDiv = document.querySelector("div.pagination");
 const studentlist = document.querySelector("ul.student-list");
 
-
-// This function creates the pages with a list and pages shown with a max of 10 items per page.
+// The showPage function creates the pages with a max of 10 items shown per page.
 function showPage(list, page) {
   let end = page * 10;
   let start = end - 10;
@@ -28,44 +26,41 @@ function showPage(list, page) {
   }
 }
 
-// This function creates the element and sets the attribute to the arguments given.
+// The createEl function takes in 3 arguments which creates an element based on the element and attribute inputed.
 function createEl(elem, attr, name) {
   let element = document.createElement(elem);
   element.setAttribute(attr, name);
   return element;
 }
 
-// Need to dynamically add links based on amount of people on the list.
-// CreateLi function within the appendPageLinks function is to create elements used in the loop.
+// The appendPageLinks function creates the pagination links and appends them to the page. This function takes in
+// a list as an argument.
 function appendPageLinks(list) {
   const div = createEl("div", "class", "pagination");
   const ul = createEl("ul", "class", "pages");
   const getDiv = document.querySelector("div.pagination");
   const number = Math.ceil(list.length / 10);
   if (page.lastElementChild === getDiv) {
-    console.log("success");
     getDiv.remove();
   }
-  if (page.lastElementChild !== getDiv){
+  if (page.lastElementChild !== getDiv) {
     for (let i = 1; i <= number; i++) {
       let li = createEl("li", "class", "link");
       let a = createEl("a", "href", "#");
       a.textContent = i;
       li.appendChild(a);
       ul.appendChild(li);
-  
+
       a.addEventListener("click", e => {
         showPage(list, e.target.textContent);
       });
     }
     div.appendChild(ul);
     page.appendChild(div);
-  
   }
-  console.log(list.length)
 }
 
-// This function creates the search elements and then appends them to the page.
+// The inputSearch function creates the input and search buttons which are then appended to the page.
 function inputSearch() {
   let divSearch = createEl("div", "class", "student-search");
   let input = createEl("input", "placeholder", "Search for students...");
@@ -77,21 +72,19 @@ function inputSearch() {
   input.setAttribute("class", "input");
 }
 
-// This function will display the list item search results to the page while hiding all other list items.
+// The getSearch function adds an event listener for the Search button. This will filter the list
+// based on the search results from the user input.
 function getSearch() {
   const getInput = document.querySelector("input.input");
   const getButton = document.querySelector("button.button");
   const getNames = document.querySelectorAll("h3");
-  const getLinks = document.querySelector("ul.pages");
   const divHeader = document.querySelector("div.pagination");
-  const linkSelect = document.querySelector("li.link")
 
-  getButton.addEventListener("click", (e) => {
-    let value = getInput.value;
+  getButton.addEventListener("click", e => {
+    let value = getInput.value.toLowerCase();
     let match = []; // array for matched names
     let notMatch = []; // array for unmatched names
-    
-    
+
     for (let i = 0; i < studentListChildren.length; i++) {
       if (getNames[i].textContent.includes(value)) {
         match.push(studentListChildren[i]);
@@ -102,21 +95,16 @@ function getSearch() {
         notMatch.push(getNames[i].textContent);
       }
     }
-
     if (value === "") {
       location.reload();
     }
-
     if (match.length == 0) {
-      studentlist.innerHTML = `<p>No results found. Please click Show List to try again.</p>`;
+      studentlist.innerHTML = `No results found. Please click Show List to try again.`;
       divHeader.remove();
     }
-
     getInput.style.display = "none";
     getButton.textContent = "Show List";
-  
-    
-    
+
     getButton.addEventListener("click", () => {
       location.reload();
     });
