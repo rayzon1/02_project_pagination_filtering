@@ -94,7 +94,7 @@ function getSearch() {
     
     for (let i = 0; i < studentListChildren.length; i++) {
       if (getNames[i].textContent.includes(value)) {
-        match.push(studentListChildren[1]);
+        match.push(studentListChildren[i]);
         appendPageLinks(match);
         showPage(match, 1);
       } else {
@@ -109,6 +109,7 @@ function getSearch() {
 
     if (match.length == 0) {
       studentlist.innerHTML = `<p>No results found. Please click Show List to try again.</p>`;
+      divHeader.remove();
     }
 
     getInput.style.display = "none";
