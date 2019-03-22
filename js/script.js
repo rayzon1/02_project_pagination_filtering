@@ -63,8 +63,10 @@ function appendPageLinks(list) {
         }
       });
     }
+    
     div.appendChild(ul);
     page.appendChild(div);
+    linkSelector[0].setAttribute('class', 'active');
   }
 }
 
